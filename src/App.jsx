@@ -1,8 +1,10 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import EventsTab from './tabs/EventsTab'
 import ProgramsTab from './tabs/ProgramsTab'
 import ParksTab from './tabs/ParksTab'
 import NotificationsTab from './tabs/NotificationsTab'
+import AdminLogin from './tabs/AdminLogin'
+import AdminPanel from './tabs/AdminPanel'
 
 const tabs = [
   { id: 'events', label: 'Events', icon: '📅' },
@@ -13,14 +15,57 @@ const tabs = [
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('events')
+  const [adminMode, setAdminMode] = useState(false)
+  const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false)
+
+  useEffect(() => {
+    // Check if user is already authenticated
+    const isAuth = localStorage.getItem('groveAdminAuth') === 'true'
+    setIsAdminAuthenticated(isAuth)
+  }, [])
+
+  // Admin login flow
+  if (adminMode && !isAdminAuthenticated) {
+    return (
+      <AdminLogin
+        onLogin={() => {
+          setIsAdminAuthenticated(true)
+        }}
+      />
+    )
+  }
+
+  // Admin panel
+  if (adminMode && isAdminAuthenticated) {
+    return (
+      <AdminPanel
+        onLogout={() => {
+          setAdminMode(false)
+          setIsAdminAuthenticated(false)
+          localStorage.removeItem('groveAdminAuth')
+        }}
+      />
+    )
+  }
 
   return (
     <div className="bg-gray-100 min-h-screen flex justify-center">
       <div className="w-full max-w-[430px] bg-white min-h-screen flex flex-col shadow-xl relative">
         {/* Header */}
         <header className="bg-[#2d6a4f] text-white px-4 pt-10 pb-4 flex-shrink-0">
-          <h1 className="text-2xl font-bold tracking-tight">🌿 Grove</h1>
-          <p className="text-green-200 text-sm mt-0.5">Find your grove. · Champaign Park District</p>
+          <div className="flex justify-between items-start">
+            <div>
+              <h1 className="text-2xl font-bold tracking-tight">🌿 Grove</h1>
+              <p className="text-green-200 text-sm mt-0.5">Find your grove. · Champaign Park District</p>
+            </div>
+            <button
+              onClick={() => setAdminMode(true)}
+              className="text-green-200 hover:text-white transition text-xs opacity-50 hover:opacity-100"
+              title="Admin"
+            >
+              ⚙️
+            </button>
+          </div>
         </header>
 
         {/* Tab Content */}
