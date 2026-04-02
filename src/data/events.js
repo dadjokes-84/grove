@@ -17,7 +17,7 @@ export const events = [
     ageMax: 99,
     ageLabel: 'All Ages',
     url: 'https://champaignparks.org/event/family-stem-nights/',
-    dateObj: new Date(2026, 2, 31),
+    dateObj: new Date(2026, 2, 28),  // March (month 2)
   },
   {
     id: 2,
@@ -49,7 +49,7 @@ export const events = [
     ageMax: 99,
     ageLabel: 'All Ages',
     url: 'https://champaignparks.org/event/the-view-from-here-art-exhibition-for-youth-and-adults/',
-    dateObj: new Date(2026, 2, 27),
+    dateObj: new Date(2026, 2, 27),  // March 27
   },
   {
     id: 4,
